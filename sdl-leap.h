@@ -1,2 +1,4 @@
-#include "sdl/const.h"
-#include "sdl/position.hpp"
+#pragma once
+
+#include "sdl/sdl_packs.h"
+#include "input/input_packs.h"

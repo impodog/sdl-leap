@@ -24,9 +24,30 @@ link_directories(
 	${SDL_MIXER_PATH}/lib/x64
 )
 
-set(SOURCE
+set(SDL_SOURCE
 	"sdl/const.h"
+	"sdl/except.hpp"
 	"sdl/position.hpp"
+	"sdl/render.hpp"
+	"sdl/texture.hpp"
+	"sdl/surface.hpp"
+	"sdl/event.hpp"
+	"sdl/to_string.hpp"
+	"sdl/pointer.hpp"
+	"sdl/image.hpp"
+	"sdl/sdl_packs.h"
+)
+
+set(INPUT_SOURCE
+	"input/const.h"
+	"input/input_packs.h"
+)
+
+
+
+set(SOURCE
+	${SDL_SOURCE}
+	${INPUT_SOURCE}
 	"sdl-leap.cpp"
 	"sdl-leap.h"
 )
@@ -47,7 +68,7 @@ project(sdl-leap-test)
 add_executable(sdl-leap-test test.cpp ${SOURCE})
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET sdl-leap PROPERTY CXX_STANDARD 20)
+  set_property(TARGET sdl-leap-test PROPERTY CXX_STANDARD 20)
 endif()
 
-target_link_libraries(sdl-leap SDL2 SDL2main SDL2_image SDL2_ttf SDL2_mixer)
+target_link_libraries(sdl-leap-test SDL2 SDL2main SDL2_image SDL2_ttf SDL2_mixer)
