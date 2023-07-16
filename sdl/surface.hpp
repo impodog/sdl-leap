@@ -11,7 +11,7 @@ namespace leap {
 		class Surface {
 			SDL_Surface* surface_;
 		public:
-			explicit Surface(SDL_Surface *surface) const : surface_(surface) {}
+			explicit Surface(SDL_Surface *surface) noexcept : surface_(surface) {}
 
 			~Surface() {
 				SDL_FreeSurface(surface_);
@@ -40,7 +40,7 @@ namespace leap {
 				return SDL_MapRGB(surface_->format, r, g, b);
 			}
 
-			Uint32 map_rgb(const Color &color) const noexcept {
+			Uint32 map_rgb(const SDL_Color &color) const noexcept {
 				return map_rgb(color.r, color.g, color.b);
 			}
 

@@ -8,4 +8,3 @@
 #include "sdl/texture.hpp"
 #include "sdl/surface.hpp"
 #include "sdl/pointer.hpp"
-#include "sdl/image.hpp"

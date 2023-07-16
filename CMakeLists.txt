@@ -5,6 +5,8 @@ if (POLICY CMP0141)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
+set(CMAKE_CXX_STANDARD 17)
+
 set(SDL_PATH D:/libraries/SDL2-VC/SDL2-2.28.1)
 set(SDL_IMAGE_PATH D:/libraries/SDL2-VC/SDL2_image-2.6.3)
 set(SDL_TTF_PATH D:/libraries/SDL2-VC/SDL2_ttf-2.20.2)
@@ -34,20 +36,39 @@ set(SDL_SOURCE
 	"sdl/event.hpp"
 	"sdl/to_string.hpp"
 	"sdl/pointer.hpp"
-	"sdl/image.hpp"
 	"sdl/sdl_packs.h"
+)
+
+set(IMAGE_SOURCE
+	"image/image.hpp"
+	"image/image_packs.h"
+)
+
+set(TTF_SOURCE
+	"ttf/ttf.hpp"
+	"ttf/ttf_packs.h"
 )
 
 set(INPUT_SOURCE
 	"input/const.h"
+	"input/keys.hpp"
+	"input/mouse.hpp"
 	"input/input_packs.h"
+)
+
+set(WIDGET_SOURCE
+	"widget/const.h"
+	"widget/widget_packs.h"
 )
 
 
 
 set(SOURCE
 	${SDL_SOURCE}
+	${IMAGE_SOURCE}
+	${TTF_SOURCE}
 	${INPUT_SOURCE}
+	${WIDGET_SOURCE}
 	"sdl-leap.cpp"
 	"sdl-leap.h"
 )

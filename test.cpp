@@ -10,6 +10,7 @@ int main() {
 	render::Window window("Testing Leap!", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_RESIZABLE);
 	render::Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
 	event::Event event;
+	input::keys::KeyMap keys;
 	auto img = image::load("test.png");
 	image::convert(renderer, img);
 	bool quit = false;
@@ -19,6 +20,7 @@ int main() {
 		case SDL_QUIT:
 			quit = true;
 			break;
+		case SDL_KEYDOWN:
 		default:
 			break;
 		}
