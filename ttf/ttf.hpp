@@ -89,11 +89,6 @@ namespace leap {
 		};
 
 		using FontFamilyPtr = std::shared_ptr<FontFamily>;
-	}
-
-	namespace pointer {
-		using ttf::FontPtr;
-		using ttf::FontFamilyPtr;
 
 		template <typename... Types>
 		FontPtr make_font(Types &&... args) {
@@ -101,8 +96,16 @@ namespace leap {
 		}
 
 		template <typename... Types>
-		FontPtr make_font_family(Types &&... args) {
+		FontFamilyPtr make_font_family(Types &&... args) {
 			return std::make_shared<ttf::FontFamily>(std::forward<Types>(args)...);
 		}
+	}
+
+	namespace pointer {
+		using ttf::FontPtr;
+		using ttf::FontFamilyPtr;
+		using ttf::make_font;
+		using ttf::make_font_family;
+		
 	}
 }

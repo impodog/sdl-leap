@@ -29,6 +29,7 @@ link_directories(
 set(SDL_SOURCE
 	"sdl/const.h"
 	"sdl/except.hpp"
+	"sdl/color.hpp"
 	"sdl/position.hpp"
 	"sdl/render.hpp"
 	"sdl/texture.hpp"
@@ -58,6 +59,9 @@ set(INPUT_SOURCE
 
 set(WIDGET_SOURCE
 	"widget/const.h"
+	"widget/base.hpp"
+	"widget/button.hpp"
+	"widget/text_box.hpp"
 	"widget/widget_packs.h"
 )
 

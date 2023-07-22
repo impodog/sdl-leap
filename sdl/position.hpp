@@ -103,6 +103,8 @@ namespace leap {
 		using IPoint = Point<int>;
 		using FPoint = Point<float>;
 
+		const IPoint origin(0, 0);
+
 		/**
 		 * \brief The type base of a rectangle. For library users, use Rect<...> instead.
 		 * \tparam Arithmetic The arithmetic type of the rectangle, int, float, etc.
@@ -140,7 +142,10 @@ namespace leap {
 			Rect(Arithmetic x, Arithmetic y, Arithmetic w, Arithmetic h) noexcept :
 				rect_type_t<Arithmetic>{x, y, w, h} { }
 
+			/*
+			 * This is deprecated because it is ambiguous with the constructor Point(Arithmetic, Arithmetic).
 			Rect(Arithmetic w, Arithmetic h) noexcept : rect_type_t<Arithmetic>{0, 0, w, h} { }
+			*/
 
 			Rect(const Point &from, const Point &to) noexcept :
 				rect_type_t<Arithmetic>{from.x, from.y, to.x - from.x, to.y - from.y} { }
@@ -186,35 +191,87 @@ namespace leap {
 			}
 
 			Point left_up() const noexcept {
-				return Point(this->x, this->y);
+				return Point{this->x, this->y};
 			}
 
 			Point left_down() const noexcept {
-				return Point(this->x, this->y + this->h);
+				return Point{this->x, this->y + this->h};
 			}
 
 			Point right_up() const noexcept {
-				return Point(this->x + this->w, this->y);
+				return Point{this->x + this->w, this->y};
 			}
 
 			Point right_down() const noexcept {
-				return Point(this->x + this->w, this->y + this->h);
+				return Point{this->x + this->w, this->y + this->h};
 			}
 
 			Point center() const noexcept {
-				return Point(this->x + this->w / 2, this->y + this->h / 2);
+				return Point{this->x + this->w / 2, this->y + this->h / 2};
+			}
+
+			Point size() const noexcept {
+				return Point{this->w, this->h};
+			}
+
+			/**
+			 * \brief returns where the rectangle should be placed so that it is centered in dst_rect
+			 * \param dst_rect the rectangle that the current rectangle should be centered in
+			 * \return a point that represents the top left corner of the rectangle that can make the current rectangle centered in dst_rect
+			 */
+			Point center_where(const Rect &dst_rect) {
+				return {
+					(dst_rect->w - this->w) / 2 + dst_rect.x,
+					(dst_rect->h - this->h) / 2 + dst_rect.y
+				};
+			}
+
+
+			/**
+			 * \brief returns a rectangle that is centered in dst_rect
+			 * \param dst_rect the rectangle that the current rectangle should be centered in
+			 * \return a rectangle that has the same size as the current rectangle and is centered in dst_rect
+			 */
+			Rect centered(const Rect &dst_rect) {
+				return {
+					(dst_rect.w - this->w) / 2 + dst_rect.x,
+					(dst_rect.h - this->h) / 2 + dst_rect.y,
+					this->w,
+					this->h
+				};
+			}
+
+			/**
+			 * \brief shrinks the rectangle by p in pixels, while the center stays the same
+			 * \param p the size that width and height decreases(or increases if p is negative)
+			 * \return A new rectangle instance that has the same center point as the original one and the width and height decreased by p on each side.
+			 */
+			Rect shrink(int p) const noexcept {
+				return Rect(this->x + p, this->y + p, this->w - p * 2, this->h - p * 2);
 			}
 
 			/**
 			 * \brief Expands the rectangle by \c m times.
 			 * \param origin The origin point, or the point that does not move relatively during the expansion.
 			 * \param m The times to expand.
+			 * \return A new rectangle instance that is expanded from the original one by m times while the origin point is fixed.
 			 */
-			void expand(const Point &origin, Arithmetic m) noexcept {
-				this->x = m * (this->x - origin.x) + origin.x;
-				this->y = m * (this->y - origin.y) + origin.y;
-				this->w *= m;
-				this->h *= m;
+			Rect expand(const Point &origin, Arithmetic m) const noexcept {
+				return Rect((m * (this->x - origin.x)) + origin.x,
+				            (m * (this->y - origin.y)) + origin.y,
+				            this->w * m,
+				            this->h * m);
+			}
+
+
+			bool contains(const Point &point) const noexcept {
+				return this->x <= point.x && point.x <= this->x + this->w && this->y <= point.y &&
+					point.y <= this->y + this->h;
+			}
+
+			void move_to(const Point &point) {
+				this->x = point.x;
+				this->y = point.y;
 			}
 
 			operator SDL_Rect() const noexcept {

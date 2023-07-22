@@ -13,7 +13,7 @@ namespace leap {
 			SDL_Window *window_;
 
 		public:
-			Window(const char *title, int x, int y, int w, int h, Uint32 flags, bool shaped=false) noexcept {
+			Window(const char *title, int x, int y, int w, int h, Uint32 flags, bool shaped = false) noexcept {
 				if (shaped)
 					window_ = SDL_CreateShapedWindow(title, x, y, w, h, flags);
 				else
@@ -80,12 +80,12 @@ namespace leap {
 				set_logical_size(size.x, size.y);
 			}
 
-			void copy(SDL_Texture* texture, const SDL_Rect* src, const SDL_Rect* dst) const {
+			void copy(SDL_Texture *texture, const SDL_Rect *src = nullptr, const SDL_Rect *dst = nullptr) const {
 				if (SDL_RenderCopy(renderer_, texture, src, dst))
 					except::throw_exc();
 			}
 
-			void copy(SDL_Texture* texture, const IRect& src, const IRect& dst) const {
+			void copy(SDL_Texture *texture, const IRect &src, const IRect &dst) const {
 				copy(texture, &src, &dst);
 			}
 

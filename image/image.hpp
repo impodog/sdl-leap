@@ -10,7 +10,10 @@ namespace leap {
 				except::throw_exc();
 		}
 		inline pointer::SurfacePtr load(const std::string &path) {
-			return pointer::make_surface(IMG_Load(path.c_str()));
+			auto surface = IMG_Load(path.c_str());
+			if (surface)
+				return pointer::make_surface(surface);
+			except::throw_exc();
 		}
 		inline pointer::TexturePtr convert(const render::Renderer &renderer, const surface::Surface &surface) {
 			return pointer::make_texture(renderer.convert(surface));
