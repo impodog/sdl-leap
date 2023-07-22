@@ -95,11 +95,7 @@ namespace leap {
 					text_it = text_.erase(text_it);
 					texture_it = texture_.erase(texture_it);
 				}
-
-				/**
-			 * \brief access to the status of the widget
-			 * \return the pointer to the status(may be \c nullptr)
-			 */
+				
 				StatusPtr status() const noexcept override {
 					return &status_;
 				}

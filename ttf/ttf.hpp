@@ -37,7 +37,7 @@ namespace leap {
 			}
 
 			pointer::SurfacePtr render_solid_wrapped(const std::string &text, const SDL_Color &color,
-			                                         int wrap = -1) const {
+			                                         int wrap = 0) const {
 				return check(TTF_RenderUTF8_Solid_Wrapped(font_, text.c_str(), color, wrap));
 			}
 
@@ -46,7 +46,7 @@ namespace leap {
 			}
 
 			pointer::SurfacePtr render_blended_wrapped(const std::string &text, const SDL_Color &color,
-			                                           int wrap = -1) const {
+			                                           int wrap = 0) const {
 				return check(TTF_RenderUTF8_Blended_Wrapped(font_, text.c_str(), color, wrap));
 			}
 

@@ -145,12 +145,15 @@ namespace leap {
 			                                          const pos::IPoint &size, const int outline) {
 				pos::Rect front_rect(0, 0, size.x, size.y);
 				front_rect = front_rect.shrink(outline);
-				pos::Rect image_rect = image->get_range().centered(front_rect);
 
 				const surface::Surface surface(size);
 				surface.fill(back_color);
 				surface.fill(front_color, front_rect);
-				surface.blit(*image, image_rect);
+
+				if (image.get()) {
+					pos::Rect image_rect = image->get_range().centered(front_rect);
+					surface.blit(*image, image_rect);
+				}
 
 				return pointer::make_texture(renderer.convert(surface));
 			}

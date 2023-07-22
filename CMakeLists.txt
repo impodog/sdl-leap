@@ -62,6 +62,7 @@ set(WIDGET_SOURCE
 	"widget/base.hpp"
 	"widget/button.hpp"
 	"widget/text_box.hpp"
+	"widget/input_box.hpp"
 	"widget/widget_packs.h"
 )
 

@@ -21,6 +21,7 @@ int main(int argc, char **argv) {
 
 	event::Event event;
 	auto mouse = pointer::make_mouse();
+	auto key_map = pointer::make_key_map();
 
 	auto font_fam = pointer::make_font_family(WORKSPACE "/test/arial.ttf");
 
@@ -42,6 +43,20 @@ int main(int argc, char **argv) {
 
 	button::Button button(button::mouse::make_detector(mouse), button::mouse::make_clicker(mouse), button::make_drawer(style), range);
 
+	pos::Rect ip_range = { 1200, 500, 500, 200 };
+	auto ip_style = input_box::make_style(
+		input_box::make_style_bit(*renderer, dark_blue, grey, font_fam->at(30)->render_blended("Input here!", white), ip_range.size(), 3),
+		input_box::make_style_bit(*renderer, light_blue, grey, nullptr, ip_range.size(), 3)
+	);
+	input_box::InputBox input_box{
+		input_box::mouse::make_focus_changer(mouse),
+			input_box::make_cursor_mover(key_map),
+			input_box::make_inputer(key_map),
+			input_box::make_back_drawer(ip_style),
+			input_box::make_text_drawer(font_fam->at(30), white),
+			ip_range
+	};
+
 
 	bool quit = false;
 	while (!quit) {
@@ -57,6 +72,11 @@ int main(int argc, char **argv) {
 		case SDL_MOUSEMOTION:
 			mouse->motion(event->motion);
 			break;
+		case SDL_KEYDOWN:
+			key_map->key_down(event->key.keysym.sym);
+			break;
+		case SDL_KEYUP:
+			key_map->key_up(event->key.keysym.sym);
 		default:
 			break;
 		}
@@ -69,6 +89,9 @@ int main(int argc, char **argv) {
 
 		button.update();
 		button.draw(*renderer);
+
+		input_box.update();
+		input_box.draw(*renderer);
 
 		renderer->present();
 	}

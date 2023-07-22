@@ -35,6 +35,7 @@ namespace leap {
 				}
 
 				void key_up(const Keycode &key) noexcept {
+					key_pressed_ = SDLK_UNKNOWN;
 					key_down_.erase(key);
 				}
 
