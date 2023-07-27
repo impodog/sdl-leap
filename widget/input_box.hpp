@@ -12,7 +12,7 @@ namespace leap {
 			class InputBox : public Widget {
 			public:
 				struct StatusType : Status {
-					bool focused;
+					bool focused, shift=false;
 					CharList::iterator cursor;
 					pos::IRect range;
 					CharList &chars;
@@ -23,7 +23,7 @@ namespace leap {
 
 				using focus_changer = std::function<bool(const StatusType &)>;
 				using cursor_mover = std::function<void(const StatusType &, CharList::iterator &)>;
-				using inputer = std::function<int(const StatusType &)>;
+				using inputer = std::function<int(const StatusType &, bool &shift)>;
 				using back_drawer = std::function<void(const render::Renderer &, const StatusType &)>;
 				using text_drawer = std::function<void(const render::Renderer &, const StatusType &)>;
 
@@ -74,7 +74,7 @@ namespace leap {
 					}
 					if (status_.focused) {
 						cursor_mover_(status_, status_.cursor);
-						feed_input(inputer_(status_));
+						feed_input(inputer_(status_, status_.shift));
 					}
 				}
 
@@ -143,19 +143,77 @@ namespace leap {
 					return '\n';
 				case '\b':
 					return '\b';
+				case SDLK_LSHIFT:
+				case SDLK_RSHIFT:
+				case SDLK_LEFT:
+				case SDLK_RIGHT:
+					return -1;
+				default:
+					return input;
+				}
+			}
+
+			static int shift_key(const input::keys::Keycode input) {
+				if (isalpha(input)) {
+					return toupper(input);
+				}
+				switch (input) {
+				case SDLK_1:
+					return SDLK_EXCLAIM;
+				case SDLK_2:
+					return SDLK_AT;
+				case SDLK_3:
+					return SDLK_HASH;
+				case SDLK_4:
+					return SDLK_DOLLAR;
+				case SDLK_5:
+					return SDLK_PERCENT;
+				case SDLK_6:
+					return SDLK_CARET;
+				case SDLK_7:
+					return SDLK_AMPERSAND;
+				case SDLK_8:
+					return SDLK_ASTERISK;
+				case SDLK_9:
+					return SDLK_LEFTPAREN;
+				case SDLK_0:
+					return SDLK_RIGHTPAREN;
+				case SDLK_MINUS:
+					return SDLK_UNDERSCORE;
+				case SDLK_EQUALS:
+					return SDLK_PLUS;
+				case SDLK_LEFTBRACKET:
+					return '{';
+				case SDLK_RIGHTBRACKET:
+					return '}';
+				case SDLK_BACKSLASH:
+					return '|';
+				case SDLK_SEMICOLON:
+					return SDLK_COLON;
+				case SDLK_QUOTE:
+					return SDLK_QUOTEDBL;
+				case SDLK_COMMA:
+					return SDLK_LESS;
+				case SDLK_PERIOD:
+					return SDLK_GREATER;
+				case SDLK_SLASH:
+					return SDLK_QUESTION;
+				case SDLK_BACKQUOTE:
+					return '~';
 				default:
 					return input;
 				}
 			}
 
 			inline InputBox::inputer make_inputer(const pointer::KeyMapPtr &key_map) {
-				return [key_map](const InputBox::StatusType &status) -> int {
+				return [key_map](const InputBox::StatusType &status, bool &shift) -> int {
 					static int prev = -1;
 					const input::keys::Keycode cur = key_map->pressed();
 					const int key = to_usable(cur);
+					shift = key_map->is_down(SDLK_LSHIFT) || key_map->is_down(SDLK_RSHIFT);
 					if (key != -1 && prev != key) {
 						prev = key;
-						return key;
+						return shift ? shift_key(key) : key;
 					}
 					if (is_usable(cur) && !key_map->is_down(key)) {
 						prev = -1;

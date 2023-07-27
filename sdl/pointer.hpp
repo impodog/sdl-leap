@@ -14,22 +14,22 @@ namespace leap {
 		using SurfacePtr = std::shared_ptr<surface::Surface>;
 
 		template <typename... Types>
-		inline WindowPtr make_window(Types&&... args) {
+		WindowPtr make_window(Types&&... args) {
 			return std::make_shared<render::Window>(std::forward<Types>(args)...);
 		}
 
 		template <typename... Types>
-		inline RendererPtr make_renderer(Types&&... args) {
+		RendererPtr make_renderer(Types&&... args) {
 			return std::make_shared<render::Renderer>(std::forward<Types>(args)...);
 		}
 
 		template <typename... Types>
-		inline TexturePtr make_texture(Types&&... args) {
+		TexturePtr make_texture(Types&&... args) {
 			return std::make_shared<texture::Texture>(std::forward<Types>(args)...);
 		}
 
 		template <typename... Types>
-		inline SurfacePtr make_surface(Types&&... args) {
+		SurfacePtr make_surface(Types&&... args) {
 			return std::make_shared<surface::Surface>(std::forward<Types>(args)...);
 		}
 	}

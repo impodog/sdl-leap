@@ -54,7 +54,13 @@ set(INPUT_SOURCE
 	"input/const.h"
 	"input/keys.hpp"
 	"input/mouse.hpp"
+	"input/text_input.hpp"
 	"input/input_packs.h"
+)
+
+set(MIXER_SOURCE
+	"mixer/mixer.hpp"
+	"mixer/mixer_packs.hpp"
 )
 
 set(WIDGET_SOURCE
@@ -67,12 +73,12 @@ set(WIDGET_SOURCE
 )
 
 
-
 set(SOURCE
 	${SDL_SOURCE}
 	${IMAGE_SOURCE}
 	${TTF_SOURCE}
 	${INPUT_SOURCE}
+	${MIXER_SOURCE}
 	${WIDGET_SOURCE}
 	"sdl-leap.cpp"
 	"sdl-leap.h"
